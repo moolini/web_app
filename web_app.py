@@ -3,7 +3,7 @@ import random
 from _collections import defaultdict
 import pandas as pd
 import requests
-
+from flask_frozen import Freezer
 
 
 Nick_text = pd.read_pickle('Splice_In_Time.pkl')
@@ -30,7 +30,7 @@ def generator(chain, count):
     return sentence
 
 app = Flask(__name__)
-
+freezer = Freezer(app)
 @app.route("/", methods=['GET', 'POST'])
 def home():
     if request.method == 'POST':
@@ -38,5 +38,7 @@ def home():
                 return render_template("index.html", text=generator(Nick_Dict, 25))
     else:
         return render_template("index.html",text = generator(Nick_Dict, random.randint(10, 50)))
-if __name__ == "__main__":
-    app.run()
+
+
+if __name__ == '__main__':
+    freezer.freeze()
